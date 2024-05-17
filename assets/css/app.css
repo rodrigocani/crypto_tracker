@@ -1,0 +1,72 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* This file is for your main application CSS */
+/* Background CSS */
+#main {
+    @apply absolute h-full w-screen bg-[#280c4a]
+}
+
+#logo {
+    @apply relative my-8 mx-16
+}
+
+#stripe {
+    @apply relative w-[800px] h-[820px] max-h-screen object-cover float-right object-[-110%_0px]
+}
+
+#figure {
+    @apply absolute w-96 h-auto right-[600px] bottom-0
+}
+
+/* Main Content CSS */
+#content-container {
+    @apply absolute grid grid-cols-[1.5fr_1fr] text-white mt-12 mx-16 gap-[20em]
+}
+
+#content-container h1 {
+    @apply pb-2 text-3xl font-bold 
+  }
+
+#content-container span {
+    @apply opacity-50 font-mono tracking-tighter
+}
+
+/*  */
+#left-container {
+    @apply max-w-md
+}
+
+#left-container ul {
+    @apply overflow-y-scroll max-h-60 bg-none mr-10 
+}
+
+#left-container li {
+    @apply max-w-72 text-xs grid grid-cols-[0.5fr_1fr_0.5fr] items-center mt-3 border-b-gray-400 border-b border-solid
+}
+
+#left-container li div {
+    @apply mt-5
+}
+
+#left-container li p {
+    @apply opacity-75
+}
+
+/*  */
+#right-container {
+    @apply relative max-h-60 text-gray-500 text-center bg-white mt-2 pt-12 px-12 pb-7
+}
+
+#right-container select { 
+    @apply w-full text-xl
+}
+
+#right-container button { 
+    @apply bg-[#fd4c24] border-none text-white p-1 rounded-xl text-center inline-block my-2 mx-0 cursor-pointer w-full text-xl
+}
+
+#right-container p { 
+    @apply m-5
+}

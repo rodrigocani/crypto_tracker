@@ -1,0 +1,40 @@
+<div id="main">
+  <%!-- background layout --%>
+  <img src={~p"/images/bg.png"} id="stripe" />
+  <img src={~p"/images/figure.png"} id="figure" />
+  <img src={~p"/images/logobc.svg"} id="logo" />
+
+  <div id="content-container">
+    <%!-- container rendering the added crypto --%>
+    <div id="left-container">
+      <h1>Now you can track all your cryptos here!</h1>
+      <span>Just enter the cryptocurrency code on the form to the right.</span>
+      <ul>
+        <%= for selected_crypto <- @selected_cryptos do %>
+          <li>
+            <img src={~p"/images/icon.svg"} id="" width="32px" />
+            <div>
+              <p><%= selected_crypto.symbol %></p>
+              <p>$<%= selected_crypto.price_usd %></p>
+            </div>
+            <button phx-click="remove_crypto" phx-value-symbol={selected_crypto.symbol}>
+              <.icon name="hero-x-mark" class="h-4 w-4" />
+            </button>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <%!-- container rendering the select input --%>
+    <div id="right-container">
+      <form phx-submit="add_crypto">
+        <select id="crypto-select" name="crypto">
+          <%= for crypto <- @cryptos do %>
+            <option value={crypto.name}><%= crypto.name %></option>
+          <% end %>
+        </select>
+        <button type="submit">Add</button>
+        <p>Use of this service is subject to terms and conditions.</p>
+      </form>
+    </div>
+  </div>
+</div>
