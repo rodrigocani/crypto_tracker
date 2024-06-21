@@ -2,27 +2,31 @@ defmodule CryptoTrackerWeb.CryptoTracker do
   use CryptoTrackerWeb, :live_view
 
   alias CryptoTracker.Cryptos
-  alias CryptoTracker.Cryptos.Crypto
   alias CryptoTracker.Repo
+  alias CryptoTracker.Cryptos.Crypto
 
   def mount(_params, _session, socket) do
+    if connected?(socket) do
+      Cryptos.subscribe()
+    end
+
     {:ok, assign(socket, cryptos: crypto_list())}
   end
 
   # Adds a crypto to the list
   def handle_event("add_crypto", %{"crypto" => crypto_name}, socket) do
-    case update_crypto_active_status(crypto_name, true) do
-      {:ok, _crypto} ->
-        {:noreply, assign(socket, cryptos: crypto_list())}
-    end
+    update_crypto_active_status(crypto_name, true)
+    {:noreply, assign(socket, cryptos: crypto_list())}
   end
 
   # Removes a crypto from the list
   def handle_event("remove_crypto", %{"symbol" => symbol}, socket) do
-    case update_crypto_active_status_by_symbol(symbol, false) do
-      {:ok, _crypto} ->
-        {:noreply, assign(socket, cryptos: crypto_list())}
-    end
+    update_crypto_active_status(symbol, false)
+    {:noreply, assign(socket, cryptos: crypto_list())}
+  end
+
+  def handle_info(:crypto_updated, socket) do
+    {:noreply, assign(socket, cryptos: crypto_list())}
   end
 
   # Returns all the crypto from the DB
@@ -35,14 +39,13 @@ defmodule CryptoTrackerWeb.CryptoTracker do
     }
   end
 
-  defp update_crypto_active_status(crypto_name, status) do
-    crypto = Cryptos.list_cryptos() |> Enum.find(&(&1.name == crypto_name))
-    change_crypto_status(crypto, status)
-  end
+  # Updates the :active status of a crypto
+  defp update_crypto_active_status(identifier, status) do
+    Cryptos.list_cryptos()
+    |> Enum.find(&(&1.name == identifier or &1.symbol == identifier))
+    |> change_crypto_status(status)
 
-  defp update_crypto_active_status_by_symbol(symbol, status) do
-    crypto = Cryptos.list_cryptos() |> Enum.find(&(&1.symbol == symbol))
-    change_crypto_status(crypto, status)
+    Cryptos.broadcast(:crypto_updated)
   end
 
   defp change_crypto_status(%Crypto{} = crypto, status) do

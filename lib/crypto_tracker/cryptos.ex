@@ -7,6 +7,14 @@ defmodule CryptoTracker.Cryptos do
   alias CryptoTracker.Repo
   alias CryptoTracker.Cryptos.Crypto
 
+  def subscribe do
+    Phoenix.PubSub.subscribe(CryptoTracker.PubSub, "cryptos")
+  end
+
+  def broadcast(message) do
+    Phoenix.PubSub.broadcast(CryptoTracker.PubSub, "cryptos", message)
+  end
+
   @doc """
   Returns the list of cryptos.
 
