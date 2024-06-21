@@ -7,6 +7,7 @@ defmodule CryptoTracker.Repo.Migrations.CreateCrypto do
       add :symbol, :string
       add :name, :string
       add :price_usd, :decimal
+      add :active, :boolean
 
       timestamps()
     end

@@ -10,7 +10,7 @@
       <h1>Now you can track all your cryptos here!</h1>
       <span>Just enter the cryptocurrency code on the form to the right.</span>
       <ul>
-        <%= for selected_crypto <- @selected_cryptos do %>
+        <%= for selected_crypto <- @cryptos.selected_cryptos do %>
           <li>
             <img src={~p"/images/icon.svg"} id="" width="32px" />
             <div>
@@ -28,7 +28,7 @@
     <div id="right-container">
       <form phx-submit="add_crypto">
         <select id="crypto-select" name="crypto">
-          <%= for crypto <- @cryptos do %>
+          <%= for crypto <- @cryptos.inactive_cryptos do %>
             <option value={crypto.name}><%= crypto.name %></option>
           <% end %>
         </select>
