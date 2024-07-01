@@ -1,18 +1,21 @@
 <div id="main">
-  <%!-- background layout --%>
-  <img src={~p"/images/bg.png"} id="stripe" />
-  <img src={~p"/images/figure.png"} id="figure" />
-  <img src={~p"/images/logobc.svg"} id="logo" />
+  <!-- background layout -->
+  <div id="triangle" />
+  <div id="logo">
+    <img src={~p"/images/logo.png"} />
+    <p>Crypto Tracker</p>
+  </div>
+  <img src={~p"/images/img.png"} id="figure" />
 
   <div id="content-container">
-    <%!-- container rendering the added crypto --%>
+    <!-- container rendering the added crypto -->
     <div id="left-container">
       <h1>Now you can track all your cryptos here!</h1>
       <span>Just enter the cryptocurrency code on the form to the right.</span>
-      <ul>
-        <%= for selected_crypto <- @cryptos.selected_cryptos do %>
-          <li>
-            <img src={~p"/images/icon.svg"} id="" width="32px" />
+      <ul id="selected-cryptos">
+        <%= for {id, selected_crypto} <- @streams.selected_cryptos do %>
+          <li id={"selected-crypto-#{id}"}>
+            <img src={~p"/images/icon.png"} id="" width="32px" />
             <div>
               <p><%= selected_crypto.symbol %></p>
               <p>$<%= selected_crypto.price_usd %></p>
@@ -24,12 +27,12 @@
         <% end %>
       </ul>
     </div>
-    <%!-- container rendering the select input --%>
+    <!-- container rendering the select input -->
     <div id="right-container">
       <form phx-submit="add_crypto">
         <select id="crypto-select" name="crypto">
-          <%= for crypto <- @cryptos.inactive_cryptos do %>
-            <option value={crypto.name}><%= crypto.name %></option>
+          <%= for {id, crypto} <- @streams.inactive_cryptos do %>
+            <option id={"inactive-crypto-#{id}"} value={crypto.name}><%= crypto.name %></option>
           <% end %>
         </select>
         <button type="submit">Add</button>

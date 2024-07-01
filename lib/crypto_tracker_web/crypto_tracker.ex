@@ -10,36 +10,58 @@ defmodule CryptoTrackerWeb.CryptoTracker do
       Cryptos.subscribe()
     end
 
-    {:ok, assign(socket, cryptos: crypto_list())}
+    cryptos = list_cryptos_by_status()
+
+    {:ok,
+     socket
+     |> stream(:selected_cryptos, cryptos.selected_cryptos)
+     |> stream(:inactive_cryptos, cryptos.inactive_cryptos)}
   end
 
   # Adds a crypto to the list
   def handle_event("add_crypto", %{"crypto" => crypto_name}, socket) do
     update_crypto_active_status(crypto_name, true)
-    {:noreply, assign(socket, cryptos: crypto_list())}
+
+    cryptos = list_cryptos_by_status()
+
+    {:noreply,
+     socket
+     |> stream(:selected_cryptos, cryptos.selected_cryptos, reset: true)
+     |> stream(:inactive_cryptos, cryptos.inactive_cryptos, reset: true)}
   end
 
   # Removes a crypto from the list
   def handle_event("remove_crypto", %{"symbol" => symbol}, socket) do
     update_crypto_active_status(symbol, false)
-    {:noreply, assign(socket, cryptos: crypto_list())}
+
+    cryptos = list_cryptos_by_status()
+
+    {:noreply,
+     socket
+     |> stream(:selected_cryptos, cryptos.selected_cryptos, reset: true)
+     |> stream(:inactive_cryptos, cryptos.inactive_cryptos, reset: true)}
   end
 
   def handle_info(:crypto_updated, socket) do
-    {:noreply, assign(socket, cryptos: crypto_list())}
+    cryptos = list_cryptos_by_status()
+
+    {:noreply,
+     socket
+     |> stream(:selected_cryptos, cryptos.selected_cryptos, reset: true)
+     |> stream(:inactive_cryptos, cryptos.inactive_cryptos, reset: true)}
   end
 
-  # Returns all the crypto from the DB
-  defp crypto_list do
-    cryptos = Cryptos.list_cryptos()
+  defp list_cryptos_by_status do
+    {selected_cryptos, inactive_cryptos} =
+      Cryptos.list_cryptos()
+      |> Enum.split_with(& &1.active)
 
     %{
-      selected_cryptos: Enum.filter(cryptos, & &1.active),
-      inactive_cryptos: Enum.filter(cryptos, &(!&1.active))
+      selected_cryptos: selected_cryptos,
+      inactive_cryptos: Enum.sort_by(inactive_cryptos, & &1.name)
     }
   end
 
-  # Updates the :active status of a crypto
   defp update_crypto_active_status(identifier, status) do
     Cryptos.list_cryptos()
     |> Enum.find(&(&1.name == identifier or &1.symbol == identifier))
@@ -54,3 +76,7 @@ defmodule CryptoTrackerWeb.CryptoTracker do
     |> Repo.update()
   end
 end
+
+### gerador de autenticador do phoenix pra login e por usuario, nao global
+### fly.io host
+### filter through ecto db instead of returning db and then filtering

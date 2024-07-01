@@ -5,24 +5,32 @@
 /* This file is for your main application CSS */
 /* Background CSS */
 #main {
-    @apply absolute h-full w-screen bg-[#280c4a]
+    @apply absolute h-full w-screen bg-[#004D40]
+}
+
+#triangle {
+    @apply absolute bottom-0 left-0 w-0 h-0 border-solid border-b-[500px] border-b-[#48797A] border-r-[1000px] border-r-transparent;
 }
 
 #logo {
-    @apply relative my-8 mx-16
+    @apply flex relative my-8 mx-16 gap-4
 }
 
-#stripe {
-    @apply relative w-[800px] h-[820px] max-h-screen object-cover float-right object-[-110%_0px]
+#logo p {
+    @apply text-[#F8F8FF] text-3xl font-bold self-center
+}
+
+#logo img {
+    @apply relative  w-24 h-24
 }
 
 #figure {
-    @apply absolute w-96 h-auto right-[600px] bottom-0
+    @apply fixed w-64 hidden h-auto right-0 bottom-1 lg:inline
 }
 
 /* Main Content CSS */
 #content-container {
-    @apply absolute grid grid-cols-[1.5fr_1fr] text-white mt-12 mx-16 gap-[20em]
+    @apply absolute grid grid-cols-[1.5fr_1fr] text-[#F8F8FF] mt-12 mx-16 gap-[20em]
 }
 
 #content-container h1 {
@@ -35,7 +43,7 @@
 
 /*  */
 #left-container {
-    @apply max-w-md
+    @apply max-w-md bg-black/50 p-3
 }
 
 #left-container ul {
@@ -56,7 +64,7 @@
 
 /*  */
 #right-container {
-    @apply relative max-h-60 text-gray-500 text-center bg-white mt-2 pt-12 px-12 pb-7
+    @apply relative max-h-96 text-gray-500 text-center bg-white mt-2 pt-12 px-12 pb-7 xl:max-h-60
 }
 
 #right-container select { 
@@ -64,7 +72,7 @@
 }
 
 #right-container button { 
-    @apply bg-[#fd4c24] border-none text-white p-1 rounded-xl text-center inline-block my-2 mx-0 cursor-pointer w-full text-xl
+    @apply bg-[#00CED1] border-none text-[#F8F8FF] p-1 rounded-xl text-center inline-block my-2 mx-0 cursor-pointer w-full text-xl
 }
 
 #right-container p { 
