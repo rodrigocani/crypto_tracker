@@ -19,6 +19,7 @@ defmodule CryptoTrackerWeb.Router do
 
   scope "/", CryptoTrackerWeb do
     pipe_through :browser
+    get "/", Redirect, to: "/crypto-tracker"
 
     live "/crypto-tracker", CryptoTracker
   end
