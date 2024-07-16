@@ -16,16 +16,24 @@ defmodule CryptoTracker.Cryptos do
   end
 
   @doc """
-  Returns the list of cryptos.
-
-  ## Examples
-
-      iex> list_cryptos()
-      [%Crypto{}, ...]
-
+  Returns the list of active cryptos.
   """
-  def list_cryptos do
-    Repo.all(Crypto)
+  def list_active_cryptos do
+    Repo.all(from c in Crypto, where: c.active == true)
+  end
+
+  @doc """
+  Returns the list of inactive cryptos.
+  """
+  def list_inactive_cryptos do
+    Repo.all(from c in Crypto, where: c.active == false)
+  end
+
+  @doc """
+  Gets a single crypto by name or symbol.
+  """
+  def get_crypto_by_name_or_symbol(identifier) do
+    Repo.one(from c in Crypto, where: c.name == ^identifier or c.symbol == ^identifier)
   end
 
   @doc """
@@ -107,9 +115,5 @@ defmodule CryptoTracker.Cryptos do
   """
   def change_crypto(%Crypto{} = crypto, attrs \\ %{}) do
     Crypto.changeset(crypto, attrs)
-  end
-
-  def get_crypto_by_name(name) do
-    Repo.get_by(Crypto, name: name)
   end
 end

@@ -52,9 +52,8 @@ defmodule CryptoTrackerWeb.CryptoTracker do
   end
 
   defp list_cryptos_by_status do
-    {selected_cryptos, inactive_cryptos} =
-      Cryptos.list_cryptos()
-      |> Enum.split_with(& &1.active)
+    selected_cryptos = Cryptos.list_active_cryptos()
+    inactive_cryptos = Cryptos.list_inactive_cryptos()
 
     %{
       selected_cryptos: selected_cryptos,
@@ -63,8 +62,7 @@ defmodule CryptoTrackerWeb.CryptoTracker do
   end
 
   defp update_crypto_active_status(identifier, status) do
-    Cryptos.list_cryptos()
-    |> Enum.find(&(&1.name == identifier or &1.symbol == identifier))
+    Cryptos.get_crypto_by_name_or_symbol(identifier)
     |> change_crypto_status(status)
 
     Cryptos.broadcast(:crypto_updated)
@@ -77,6 +75,4 @@ defmodule CryptoTrackerWeb.CryptoTracker do
   end
 end
 
-### gerador de autenticador do phoenix pra login e por usuario, nao global
 ### fly.io host
-### filter through ecto db instead of returning db and then filtering
